@@ -1,41 +1,19 @@
 import pytest
 import allure
-from selenium import webdriver
-from urls import Urls
+from conftest import driver
 from pages.main_page import MainPage
 from data.main_page_data import expected_answers
 
 
 class TestMainPage:
-    driver = None
-
-    @classmethod
-    def setup_class(cls):
-        # создали драйвер для браузера Firefox
-        cls.driver = webdriver.Firefox()
 
     @pytest.mark.parametrize("question_index", range(8))
     @allure.title('Проверка появления соответствующиго ответа при нажатии на вопрос')
-    def test_answer_to_question(self, question_index):
+    def test_answer_to_question(self, driver, question_index):
 
-        # перешли на страницу тестового приложения
-        self.driver.get(Urls.base_url)
+        main_page = MainPage(driver)     # Создаём объект класса домашней страницы
+        main_page.take_cookies()     # Принимаем куки
+        answer_text = main_page.question_and_answer(question_index)     # Получаем текст ответа по клику на вопрос
+        expected_answer = expected_answers[question_index]     # Определяем ожидаемый ответ по индексу вопроса, на который кликали
+        assert answer_text == expected_answer     # Делаем проверку, что полученный ответ совпадает c ожидаемым
 
-        # создай объект класса домашней страницы
-        main_page = MainPage(self.driver)
-        main_page.take_cookies()
-
-        # Получаем ответ на вопрос
-        answer_text = main_page.question_and_answer(question_index)
-
-        expected_answer = expected_answers[question_index]
-
-        # Делаем проверку, что полученное значение совпадает c ожидаемым
-        assert answer_text == expected_answer
-
-    @classmethod
-    def teardown_class(cls):
-        # Удаляем все куки
-        cls.driver.delete_all_cookies()
-        # Закрываем браузер
-        cls.driver.quit()
