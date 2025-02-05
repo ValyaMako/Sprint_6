@@ -98,4 +98,4 @@ class MainPage(BasePage):
     def go_to_dzen(self):
         self.wait_for_new_tab(2)    # Ожидаем открытие второй вкладки
         self.go_to_new_tab(-1)      # Открываем последнюю вкладку
-        self.wait_for_url_to_be(Urls.dzen_url)    # Ожидаем загрузки страницы Дзена
+        return self.wait_for_url_to_be(Urls.dzen_url)    # Возвращает True, если страница с ожидаемым URL загрузилась

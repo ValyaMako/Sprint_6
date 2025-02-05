@@ -14,4 +14,4 @@ class TestGoToMainPage:
         order_page = OrderPage(driver)     # Создаем объект класса формы заказа
         order_page.click_on_logo_scooter()      # Клик на кнопку лого Самоката
         main_page = MainPage(driver)  # Создаем новый объект класса главной старницы
-        assert driver.current_url == Urls.base_url    # Проверяем, что URL текущей страницы равен URL главной страницы
+        assert main_page.get_current_url() == Urls.base_url    # Проверяем, что URL текущей страницы равен URL главной страницы
